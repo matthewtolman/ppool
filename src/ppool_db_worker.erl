@@ -20,52 +20,72 @@ start_link(Args) ->
     gen_server:start_link(?MODULE, Args, []).
 
 init(Args) ->
-    Args1 = if is_map(Args) -> maps:to_list(Args);
-               true -> Args
-            end,
+    Args1 = ppool_conf:standardize_conf(Args),
     process_flag(trap_exit, true),
-    Hostname = proplists:get_value(hostname, Args1),
-    Database = proplists:get_value(database, Args1),
-    Username = proplists:get_value(username, Args1),
-    Password = proplists:get_value(password, Args1),
-    Port = proplists:get_value(port, Args1, 5432),
-    Ssl = proplists:get_value(ssl, Args1, false),
-    SslOpts = proplists:get_value(ssl_opts, Args1, []),
-    TcpOpts = proplists:get_value(tcp_opts, Args1, []),
-    Timeout = proplists:get_value(timeout, Args1, 5000),
+    Hostname = ppool_conf:get_conf_value(string, hostname, Args1),
+    Database = ppool_conf:get_conf_value(string, database, Args1),
+    Username = ppool_conf:get_conf_value(string, username, Args1),
+    Password = ppool_conf:get_conf_value(string, password, Args1),
+    Port = ppool_conf:get_conf_value(integer, port, Args1, 5432),
+    Ssl = ppool_conf:get_conf_value(atom, ssl, Args1, false),
+    SslOpts = ppool_conf:get_conf_value(list, ssl_opts, Args1, []),
+    TcpOpts = ppool_conf:get_conf_value(list, tcp_opts, Args1, []),
+    Timeout = ppool_conf:get_conf_value(integer, timeout, Args1, 5000),
 
     Opts =
-          #{
-            host => Hostname,
-            username => Username,
-            password => Password, 
-            database => Database,
-            port => Port,
-            timeout => Timeout,
-            ssl => Ssl,
-            ssl_opts => SslOpts,
-            tcp_opts => TcpOpts
-           },
-    Opts1 = case proplists:is_defined(socket_active, Args1) of
-                true -> Opts#{socket_active => proplists:get_value(socket_active, Args1)};
-                _ -> Opts
-            end,
-    Opts2 = case proplists:is_defined(async, Args1) of
-                true -> Opts1#{async => proplists:get_value(async, Args1)};
-                _ -> Opts1
-            end,
-    Opts3 = case proplists:is_defined(codecs, Args1) of
-                true -> Opts2#{codecs => proplists:get_value(codecs, Args1)};
-                _ -> Opts2
-            end,
-    Opts4 = case proplists:is_defined(nulls, Args1) of
-                true -> Opts3#{nulls => proplists:get_value(nulls, Args1)};
-                _ -> Opts3
-            end,
-    Opts5 = case proplists:is_defined(replication, Args1) of
-                true -> Opts4#{replication => proplists:get_value(replication, Args1)};
-                _ -> Opts4
-            end,
+        #{host => Hostname,
+          username => Username,
+          password => Password,
+          database => Database,
+          port => Port,
+          timeout => Timeout,
+          ssl => Ssl,
+          ssl_opts => SslOpts,
+          tcp_opts => TcpOpts},
+    Opts1 =
+        case ppool_conf:is_defined(socket_active, Args1) of
+            true ->
+                SocketActive = ppool_conf:get_conf_value(boolean, socket_active, Args1),
+                case SocketActive of
+                    [] -> false;
+                    V when is_boolean(V) -> V;
+                    V when is_integer(V) -> V;
+                    "true" -> true;
+                    "false" -> false;
+                    S -> list_to_integer(S)
+                end,
+                Opts#{socket_active => SocketActive};
+            _ ->
+                Opts
+        end,
+    Opts2 =
+        case ppool_conf:is_defined(async, Args1) of
+            true ->
+                Opts1#{async => ppool_conf:get_conf_value(atom, async, Args1)};
+            _ ->
+                Opts1
+        end,
+    Opts3 =
+        case ppool_conf:is_defined(codecs, Args1) of
+            true ->
+                Opts2#{codecs => ppool_conf:get_conf_value(proplist, codecs, Args1)};
+            _ ->
+                Opts2
+        end,
+    Opts4 =
+        case ppool_conf:is_defined(nulls, Args1) of
+            true ->
+                Opts3#{nulls => ppool_conf:get_conf_value(list, nulls, Args1)};
+            _ ->
+                Opts3
+        end,
+    Opts5 =
+        case ppool_conf:is_defined(replication, Args1) of
+            true ->
+                Opts4#{replication => ppool_conf:get_conf_value(string, replication, Args1)};
+            _ ->
+                Opts4
+        end,
 
     {ok, Conn} = epgsql:connect(Opts5),
     {ok, #state{conn = Conn}}.

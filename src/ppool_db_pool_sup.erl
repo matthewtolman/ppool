@@ -55,7 +55,7 @@ init(Args) ->
                       {inflection_method, InflectionMethod}]]},
           restart => permanent,
           type => worker},
-    {ok, {{one_for_one, 10, 10}, [DefaultsSpec | PoolSpecs]}}.
+    {ok, {{one_for_one, 10, 1000}, [DefaultsSpec | PoolSpecs]}}.
 
 query(PoolName, Sql) ->
     poolboy:transaction(PoolName, fun(Worker) -> ppool_db_worker:equery(Worker, Sql, []) end).
@@ -71,19 +71,23 @@ make_pool(#{name := Name,
            db := WorkerArgs}) ->
     make_pool({Name, #{size => 10}, WorkerArgs});
 make_pool({Name, SizeArgs, WorkerArgs}) ->
-    SizeArgs1 =
-        if is_map(SizeArgs) ->
-               maps:to_list(SizeArgs);
-           true ->
-               SizeArgs
-        end,
+    SizeArgs1 = ppool_conf:standardize_conf(SizeArgs),
+    Size = ppool_conf:get_conf_value(integer, size, SizeArgs1, 10),
+    Overflow = ppool_conf:get_conf_value(integer, max_overflow, SizeArgs1, 10),
+    Strategy = case ppool_conf:get_conf_value(atom, strategy, SizeArgs1, lifo) of
+                   lifo -> lifo;
+                   fifo -> fifo;
+                   V -> throw({invalid_conf, [{key, strategy}, {value, V}, {expected, [lifo, fifo]}]})
+               end,
+
     WorkerArgs1 =
         if is_map(WorkerArgs) ->
                maps:to_list(WorkerArgs);
            true ->
                WorkerArgs
         end,
-    PoolArgs = [{name, {local, Name}}, {worker_module, ppool_db_worker}] ++ SizeArgs1,
+    SizeOpts = [{size, Size}, {max_overflow, Overflow}, {strategy, Strategy}],
+    PoolArgs = [{name, {local, Name}}, {worker_module, ppool_db_worker}] ++ SizeOpts,
     poolboy:child_spec(Name, PoolArgs, WorkerArgs1).
 
 first_pool([#{name:=Name} | _]=_Pools) -> Name;

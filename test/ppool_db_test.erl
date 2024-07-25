@@ -38,11 +38,26 @@ init(_) ->
                                                        [#{name => conn_test_pool,
                                                           pool => #{size => 10, max_overflow => 20},
                                                           db =>
-                                                                  #{hostname => os:getenv("DB_HOST", "pop-os"),
-                                                                    database => os:getenv("DB_DATABASE", "nindex"),
-                                                                    username => os:getenv("DB_USER", "nindex_user"),
-                                                                    password => os:getenv("DB_PWD", "nindex_pw"),
-                                                                    port => list_to_integer(os:getenv("DB_PORT", "5433"))}}]}),
+                                                                  #{hostname =>
+                                                                            {chain,
+                                                                             [{env, "DB_HOST"},
+                                                                              "pop-os"]},
+                                                                    database =>
+                                                                            {chain,
+                                                                             [{env, "DB_DATABASE"},
+                                                                              "nindex"]},
+                                                                    username =>
+                                                                            {chain,
+                                                                             [{env, "DB_USER"},
+                                                                              "nindex_user"]},
+                                                                    password =>
+                                                                            {chain,
+                                                                             [{env, "DB_PWD"},
+                                                                              "nindex_pw"]},
+                                                                    port =>
+                                                                            {chain,
+                                                                             [{env, "DB_PORT"},
+                                                                              5433]}}}]}),
         ensure_table_setup(TableId),
         STable = ppool_inflection:singular(TableId),
         {ok, #state{table = TableId, key = <<STable/binary, "_id">>}}.
