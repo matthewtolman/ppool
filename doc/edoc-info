@@ -1,0 +1,4 @@
+%% encoding: UTF-8
+{application,ppool}.
+{modules,[ppool_app,ppool_db,ppool_db_pool_sup,ppool_defaults,
+          ppool_inflection,ppool_sup]}.

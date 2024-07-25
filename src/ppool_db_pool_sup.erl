@@ -1,3 +1,18 @@
+%% ----------------------------------
+%%
+%% @author Matthew Tolman
+%% @copyright 2024 Matthew Tolman
+%% @doc
+%% Postgress Pool (ppool) database supervisor.
+%%
+%% Typically, this is started automatically by adding "ppool" to your application list or using application:start(ppool).
+%% However, if you want finer control (for some reason), you can start this manually. If you do so, you can pass the
+%% configuration directly to {@link ppool_db_pool_sup:start_link/1}.
+%% @end
+%% @version 0.1.1
+%% @end
+%%
+%% ----------------------------------
 -module(ppool_db_pool_sup).
 
 -behaviour(supervisor).
@@ -5,9 +20,23 @@
 -export([query/2, query/3, start_link/1, start_link/0]).
 -export([init/1]).
 
+%% ----------------------------------
+%%
+%% @doc Starts the supervisor.
+%% @end
+%%
+%% ----------------------------------
 start_link() ->
     start_link([]).
 
+%% ----------------------------------
+%%
+%% @doc
+%% Starts the supervisor with specific arguments.
+%% These arguments are either a map or prop list of configuration options (see README.md).
+%% @end
+%%
+%% ----------------------------------
 start_link(Args=#{}) ->
     start_link(maps:to_list(Args));
 start_link(Args) when is_list(Args) ->
@@ -21,6 +50,12 @@ start_link(Args) when is_list(Args) ->
         end,
     supervisor:start_link(SupName1, ?MODULE, Args).
 
+%% ----------------------------------
+%%
+%% @doc Supervisor init/1 callback.
+%% @end
+%%
+%% ----------------------------------
 init(Args=#{}) ->
     init(maps:to_list(Args));
 init(Args) ->
@@ -57,9 +92,27 @@ init(Args) ->
           type => worker},
     {ok, {{one_for_one, 10, 1000}, [DefaultsSpec | PoolSpecs]}}.
 
+%% ----------------------------------
+%%
+%% @doc
+%% Runs a SQL query against a specific pool.
+%% Do NOT call directly (unless you know what you're doing).
+%% Instead, use {@link ppool_db:query/1} or {@link ppool_db:query/2} instead
+%% @end
+%%
+%% ----------------------------------
 query(PoolName, Sql) ->
     poolboy:transaction(PoolName, fun(Worker) -> ppool_db_worker:equery(Worker, Sql, []) end).
 
+%% ----------------------------------
+%%
+%% @doc
+%% Runs a SQL query against a specific pool.
+%% Do NOT call directly (unless you know what you're doing).
+%% Instead, use {@link ppool_db:query/2} or {@link ppool_db:query/3} instead
+%% @end
+%%
+%% ----------------------------------
 query(PoolName, Stmt, Params) ->
     poolboy:transaction(PoolName, fun(Worker) -> ppool_db_worker:equery(Worker, Stmt, Params) end).
 

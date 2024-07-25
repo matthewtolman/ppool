@@ -1,7 +1,13 @@
-%%%-------------------------------------------------------------------
+%% ----------------------------------
+%%
+%% @author Matthew Tolman
+%% @copyright 2024 Matthew Tolman
 %% @doc ppool top level supervisor.
 %% @end
-%%%-------------------------------------------------------------------
+%% @version 0.1.1
+%% @end
+%%
+%% ----------------------------------
 
 -module(ppool_sup).
 
@@ -13,6 +19,7 @@
 
 -define(SERVER, ?MODULE).
 
+%% @doc Start supervisor
 start_link() ->
     supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
@@ -25,6 +32,7 @@ start_link() ->
 %%                  shutdown => shutdown(), % optional
 %%                  type => worker(),       % optional
 %%                  modules => modules()}   % optional
+%% @doc Supervisor init callback
 init([]) ->
     SupFlags = #{strategy => one_for_all,
                  intensity => 5,

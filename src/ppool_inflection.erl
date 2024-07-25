@@ -1,3 +1,17 @@
+%% ----------------------------------
+%%
+%% @author Matthew Tolman
+%% @copyright 2024 Matthew Tolman
+%% @doc
+%% Plural -> Singular inflection algorithm.
+%%
+%% Note: This is not a complete algorithm. It's meant for common use cases.
+%% It follows the Ruby on Rails algorithm pretty closely, though there is some deviation (e.g. bases -> base vs bases -> basis).
+%% @end
+%% @version 0.1.1
+%% @end
+%%
+%% ----------------------------------
 -module(ppool_inflection).
 
 -export([singular/1]).
@@ -53,6 +67,7 @@
 -define(GOOSE_RULE, "(geese)$").
 -define(GOOSE_REPLACE, "goose").
 
+%% @doc Converts a plural word into a singular word
 singular(Word) ->
     singular(Word, [
                     {?SS_RULE, ?SS_REPLACE},

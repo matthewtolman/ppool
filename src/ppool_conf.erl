@@ -1,3 +1,15 @@
+%% ----------------------------------
+%%
+%% @author Matthew Tolman
+%% @copyright 2024 Matthew Tolman
+%% @doc Gets configurations for ppool. Private, should not be used externally.
+%% @end
+%% @version 0.1.1
+%% @end
+%%
+%% @hidden
+%%
+%% ----------------------------------
 -module(ppool_conf).
 
 -export([get_conf_value/3, get_conf_value/4, standardize_conf/1, is_defined/2,

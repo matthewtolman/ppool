@@ -1,3 +1,15 @@
+%% ----------------------------------
+%%
+%% @author Matthew Tolman
+%% @copyright 2024 Matthew Tolman
+%% @doc Internal worker module.
+%% @end
+%% @version 0.1.1
+%% @end
+%%
+%% @hidden
+%%
+%% ----------------------------------
 -module(ppool_db_worker).
 
 -behavior(gen_server).

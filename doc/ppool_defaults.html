@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module ppool_defaults</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module ppool_defaults</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>  
+GenServer for default pool values (used when running database queries).
+<p>Copyright © 2024 Matthew Tolman</p>
+
+<p><b>Version:</b> 0.1.1</p>
+<p><b>Authors:</b> Matthew Tolman.</p>
+
+<h2><a name="description">Description</a></h2><p>  
+GenServer for default pool values (used when running database queries).  
+Public for debugging purposes.</p>
+ 
+  Note: the state in the gen server is read-only and is setup by <a docgen-rel="seemfa" docgen-href="ppool_db_pool_sup#init/1" href="ppool_db_pool_sup.html#init-1"><code>ppool_db_pool_sup:init/1</code></a>.
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>gen_server callback.</td></tr>
+<tr><td valign="top"><a href="#default_id_suffix-0">default_id_suffix/0</a></td><td>Gets the default key column suffix.</td></tr>
+<tr><td valign="top"><a href="#default_pool-0">default_pool/0</a></td><td>gets the default pool to use.</td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>gen_server callback.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>gen_server callback.</td></tr>
+<tr><td valign="top"><a href="#handle_continue-2">handle_continue/2</a></td><td>gen_server callback.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>gen_server callback.</td></tr>
+<tr><td valign="top"><a href="#inflection_method-0">inflection_method/0</a></td><td>Returns the inflection method used when determining the key column.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>gen_server callback.</td></tr>
+<tr><td valign="top"><a href="#start_link-0">start_link/0</a></td><td>Start server.</td></tr>
+<tr><td valign="top"><a href="#start_link-1">start_link/1</a></td><td>Start server with specific defaults.</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>gen_server callback.</td></tr>
+<tr><td valign="top"><a href="#use_inflection-0">use_inflection/0</a></td><td>Returns whether plural -&gt; singular inflection is used when determining the key column.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><code>code_change(OldVsn, State, Extra) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server callback</p>
+
+<h3 class="function"><a name="default_id_suffix-0">default_id_suffix/0</a></h3>
+<div class="spec">
+<p><code>default_id_suffix() -&gt; any()</code></p>
+<p> </p>
+</div><p>Gets the default key column suffix</p>
+
+<h3 class="function"><a name="default_pool-0">default_pool/0</a></h3>
+<div class="spec">
+<p><code>default_pool() -&gt; any()</code></p>
+<p> </p>
+</div><p>gets the default pool to use</p>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><code>handle_call(Msg, From, State) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server callback</p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><code>handle_cast(Msg, State) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server callback</p>
+
+<h3 class="function"><a name="handle_continue-2">handle_continue/2</a></h3>
+<div class="spec">
+<p><code>handle_continue(Msg, State) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server callback</p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><code>handle_info(Msg, State) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server callback</p>
+
+<h3 class="function"><a name="inflection_method-0">inflection_method/0</a></h3>
+<div class="spec">
+<p><code>inflection_method() -&gt; any()</code></p>
+<p> </p>
+</div><p>Returns the inflection method used when determining the key column</p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><code>init(Args) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server callback</p>
+
+<h3 class="function"><a name="start_link-0">start_link/0</a></h3>
+<div class="spec">
+<p><code>start_link() -&gt; any()</code></p>
+<p> </p>
+</div><p>Start server</p>
+
+<h3 class="function"><a name="start_link-1">start_link/1</a></h3>
+<div class="spec">
+<p><code>start_link(Args) -&gt; any()</code></p>
+<p> </p>
+</div><p>Start server with specific defaults</p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><code>terminate(Reason, State) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server callback</p>
+
+<h3 class="function"><a name="use_inflection-0">use_inflection/0</a></h3>
+<div class="spec">
+<p><code>use_inflection() -&gt; any()</code></p>
+<p> </p>
+</div><p>Returns whether plural -&gt; singular inflection is used when determining the key column</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc</i></p>
+</body>
+</html>
