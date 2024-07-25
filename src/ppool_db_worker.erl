@@ -46,7 +46,7 @@ init(Args) ->
         case ppool_conf:is_defined(socket_active, Args1) of
             true ->
                 SocketActive = ppool_conf:get_conf_value(boolean, socket_active, Args1),
-                case SocketActive of
+                SocketActive1 = case SocketActive of
                     [] -> false;
                     V when is_boolean(V) -> V;
                     V when is_integer(V) -> V;
@@ -54,7 +54,7 @@ init(Args) ->
                     "false" -> false;
                     S -> list_to_integer(S)
                 end,
-                Opts#{socket_active => SocketActive};
+                Opts#{socket_active => SocketActive1};
             _ ->
                 Opts
         end,
