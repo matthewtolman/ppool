@@ -11,7 +11,7 @@ Build
 Configuration
 -----
 
-Configuration can be passed through maps. Configuration is in the following format:
+Configuration can be passed through maps or proplists. App config files will be setting config for the `ppool` app. Configuration is in the following format:
 
 ```erlang
 -type(resolver(t) :: {env, string()} | % get system environment variable
