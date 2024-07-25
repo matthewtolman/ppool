@@ -37,13 +37,13 @@ init(Args) ->
         proplists:get_value(default_pool,
                             Args,
                             application:get_env(ppool, default_pool, first_pool(Pools))),
-    DefaultIdSuffix = case proplists:get_value(id_suffix, Args, <<"_id">>) of
+    DefaultIdSuffix = case proplists:get_value(id_suffix, Args, application:get_env(ppool, id_suffix, <<"_id">>)) of
                           Suffix when is_binary(Suffix) -> Suffix;
                           List when is_list(List) -> list_to_binary(List);
                           Atom when is_atom(Atom) -> atom_to_binary(Atom)
                       end,
-    Inflection = proplists:get_value(use_inflection, Args, true),
-    InflectionMethod = proplists:get_value(inflection_method, Args, {ppool_inflection, singular}),
+    Inflection = proplists:get_value(use_inflection, Args, application:get_env(ppool, use_inflection, true)),
+    InflectionMethod = proplists:get_value(inflection_method, Args, application:get_env(ppool, inflection_method, {ppool_inflection, singular})),
 
     PoolSpecs = lists:map(fun(PoolSpec) -> make_pool(PoolSpec) end, Pools),
     DefaultsSpec =
