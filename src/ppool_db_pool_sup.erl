@@ -11,7 +11,7 @@ start_link() ->
 start_link(Args=#{}) ->
     start_link(maps:to_list(Args));
 start_link(Args) when is_list(Args) ->
-    SupName = proplists:get_value(sup_name, Args, {local, ?MODULE}),
+    SupName = proplists:get_value(sup_name, Args, {local, ppool_db_pool_sup}),
     SupName1 =
         case SupName of
             P when is_atom(P) ->
@@ -27,7 +27,7 @@ init(Args) ->
     ArgPools = proplists:get_value(pools, Args, []),
     EnvPools =
         try
-            application:get_env(ppool_app, pools, [])
+            application:get_env(ppool, pools, [])
         catch
             _ ->
                 []
@@ -36,7 +36,7 @@ init(Args) ->
     DefaultPool =
         proplists:get_value(default_pool,
                             Args,
-                            application:get_env(ppool_app, default_pool, first_pool(Pools))),
+                            application:get_env(ppool, default_pool, first_pool(Pools))),
     DefaultIdSuffix = case proplists:get_value(id_suffix, Args, <<"_id">>) of
                           Suffix when is_binary(Suffix) -> Suffix;
                           List when is_list(List) -> list_to_binary(List);
