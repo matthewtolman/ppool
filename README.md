@@ -8,6 +8,11 @@ Build
 
     $ rebar3 compile
 
+Docs
+-----
+
+    $ rebar3 edoc
+
 Configuration
 -----
 
